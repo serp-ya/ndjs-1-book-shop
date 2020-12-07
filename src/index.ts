@@ -1,11 +1,8 @@
-import express from 'express';
-import cors from 'cors';
+import { server } from './server';
 import { APP_DEFAULT_PORT } from './constants';
 
-const app = express();
-app.use(cors());
+const appPort = process.env.APP_PORT || APP_DEFAULT_PORT;
 
-const appPort = process.env.APP_PORT || APP_DEFAULT_PORT
-app.listen(appPort, () => {
+server.listen(appPort, () => {
     process.stdout.write(`Server started on ${appPort} port!\n`);
 });
