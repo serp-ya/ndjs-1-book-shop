@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { db } from '@/db';
+import { db } from '@/database/db';
 import {
     BAD_REQUEST_MESSAGE_STATUS_CODE,
     NOT_FOUND_MESSAGE,
