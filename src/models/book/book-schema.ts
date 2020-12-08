@@ -5,7 +5,7 @@ export const bookParamsSchema = Joi.object({
     title: Joi.string().min(2).required(),
     description: Joi.string().min(2).required(),
     authors: Joi.string().min(2).required(),
-    favorite: Joi.string(),
+    favorite: Joi.boolean(),
     fileCover: Joi.string().min(2).required(),
     fileName: Joi.string().min(2).required(),
 });
