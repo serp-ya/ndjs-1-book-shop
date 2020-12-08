@@ -1,0 +1,29 @@
+[
+    {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+        "title": "A Promised Land",
+        "description": "In the stirring, highly anticipated first volume of his presidential memoirs, Barack Obama tells the story of his improbable odyssey from young man searching for his identity to leader of the free world, describing in strikingly personal detail both his political education and the landmark moments of the first term of his historic presidency—a time of dramatic transformation and turmoil.",
+        "authors": "Barack Obama",
+        "favorite": "true",
+        "fileCover": "https://images-na.ssl-images-amazon.com/images/I/41L5qgUW2fL._SX327_BO1,204,203,200_.jpg",
+        "fileName": "41L5qgUW2fL._SX327_BO1,204,203,200_.jpg"
+    },
+    {
+        "id": "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed",
+        "title": "Greenlights ",
+        "description": "I’ve been in this life for fifty years, been trying to work out its riddle for forty-two, and been keeping diaries of clues to that riddle for the last thirty-five. Notes about successes and failures, joys and sorrows, things that made me marvel, and things that made me laugh out loud. How to be fair. How to have less stress. How to have fun. How to hurt people less. How to get hurt less. How to be a good man. How to have meaning in life. How to be more me.",
+        "authors": "Matthew McConaughey",
+        "favorite": "true",
+        "fileCover": "https://images-na.ssl-images-amazon.com/images/I/41U3yoF6sXL._SX427_BO1,204,203,200_.jpg",
+        "fileName": "41U3yoF6sXL._SX427_BO1,204,203,200_.jpg"
+    },
+    {
+        "id": "2c5ea4c0-4067-11e9-8bad-9b1deb4d3b7d",
+        "title": "Becoming ",
+        "description": "In a life filled with meaning and accomplishment, Michelle Obama has emerged as one of the most iconic and compelling women of our era. As First Lady of the United States of America—the first African American to serve in that role—she helped create the most welcoming and inclusive White House in history, while also establishing herself as a powerful advocate for women and girls in the U.S. and around the world, dramatically changing the ways that families pursue healthier and more active lives, and standing with her husband as he led America through some of its most harrowing moments. Along the way, she showed us a few dance moves, crushed Carpool Karaoke, and raised two down-to-earth daughters under an unforgiving media glare.",
+        "authors": "Michelle Obama",
+        "favorite": "true",
+        "fileCover": "https://images-na.ssl-images-amazon.com/images/I/414JfiBCutL._SX327_BO1,204,203,200_.jpg",
+        "fileName": "414JfiBCutL._SX327_BO1,204,203,200_.jpg"
+    }
+]
