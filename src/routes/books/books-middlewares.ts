@@ -4,7 +4,7 @@ import {
   BOOKS_FILE_FIELDNAME,
   BOOKS_FOLDER_PATH,
 } from './books-constants';
-import { generateUniqueFilename } from './books-utils';
+import { generateSecretFilename } from './books-utils';
 
 const downloadBooksFileFilter = (req, file, cb) => {
   const fileIsAvalibleByType = BOOKS_AVAILABLE_FILETYPES.some(availableType => (
@@ -16,7 +16,14 @@ const downloadBooksFileFilter = (req, file, cb) => {
 
 const downloadBooksStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, BOOKS_FOLDER_PATH),
-  filename: (req, file, cb) => cb(null, generateUniqueFilename(file.originalname)),
+  filename: (req, file, cb) => (
+    cb(
+      Object.values(req.body).length !== 0
+        ? null
+        : new Error('Can\'t to handle request (empty body)'),
+      generateSecretFilename(file.originalname, req.body),
+    )
+  ),
 });
 
 export const downloadBooksMiddleware = multer({

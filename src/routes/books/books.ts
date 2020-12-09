@@ -1,9 +1,10 @@
+import fs from 'fs';
 import { Router } from 'express';
 import { db, DBError } from '@/database';
 import { EStatusCodes, NOT_FOUND_MESSAGE, ROUTES_BASE } from '@/routes';
 import { Book } from '@/models';
 import { downloadBooksMiddleware } from './books-middlewares';
-import { getFilePathByFileName, recoverOriginalFilename } from './books-utils';
+import { getFilePathByFileName, generateSecretFilename } from './books-utils';
 
 export const booksRoute = Router();
 
@@ -26,7 +27,7 @@ booksRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
 
 booksRoute.get(`${ROUTES_BASE}:id/download`, (req, res) => {
     const { id } = req.params;
-    const bookById = db.getBook(id);
+    const bookById = db.getBook(id) as Book;
 
     if (!bookById) {
         res.statusCode = EStatusCodes.NotFound;
@@ -34,18 +35,19 @@ booksRoute.get(`${ROUTES_BASE}:id/download`, (req, res) => {
         return;
     }
 
-    const { fileName } = bookById as Book;
+    const { fileName } = bookById;
+    const secretFileName = generateSecretFilename(fileName, bookById);
 
     res.download(
-        getFilePathByFileName(fileName),
-        recoverOriginalFilename(fileName),
+        getFilePathByFileName(secretFileName),
+        fileName,
         (err) => err && res.status(EStatusCodes.NotFound).json(NOT_FOUND_MESSAGE)
     );
 });
 
 booksRoute.post(ROUTES_BASE, downloadBooksMiddleware, (req, res) => {
     const { key, ...newBookParams } = req.body;
-    const fileName = req?.file?.filename;
+    const fileName = req.file?.originalname;
 
     const newBook = db.createBook({ ...newBookParams, fileName });
 
@@ -70,11 +72,12 @@ booksRoute.post(ROUTES_BASE, downloadBooksMiddleware, (req, res) => {
 booksRoute.put(`${ROUTES_BASE}:id`, downloadBooksMiddleware, (req, res) => {
     const { id } = req.params;
     const { key, ...newBookParams } = req.body;
-    const fileName = req?.file?.filename;
+    const fileName = req.file?.filename;
 
     if (fileName) {
         Object.assign(newBookParams, { fileName })
     }
+    const prevBook = db.getBook(id) as Book;
     const updatedBook = db.updateBook(id, newBookParams);
 
     if (updatedBook === false) {
@@ -88,8 +91,18 @@ booksRoute.put(`${ROUTES_BASE}:id`, downloadBooksMiddleware, (req, res) => {
         res.json(updatedBook.errors);
         return;
     }
+    const prevSecretFileName = generateSecretFilename(prevBook.fileName, prevBook);
+    const newSecretFileName = generateSecretFilename((updatedBook as Book).fileName, updatedBook as Book);
 
-    res.json(updatedBook);
+    fs.promises.rename(
+        getFilePathByFileName(prevSecretFileName),
+        getFilePathByFileName(newSecretFileName),
+    )
+    .then(() => res.json(updatedBook))
+    .catch(err => {
+        db.updateBook(id, prevBook);
+        throw err;
+    });
 });
 
 booksRoute.delete(`${ROUTES_BASE}:id`, (req, res) => {
