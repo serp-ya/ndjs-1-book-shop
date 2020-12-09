@@ -10,63 +10,66 @@ import { TBookParams } from '@/models';
 
 export const booksRoute = Router();
 
-booksRoute
-    .get(ROUTES_BASE, (_, res) => {
-        res.json(db.getBook());
-    })
-    .get(`${ROUTES_BASE}:id`, (req, res) => {
-        const { id } = req.params;
-        const bookById = db.getBook(id);
+booksRoute.get(ROUTES_BASE, (_, res) => {
+    res.json(db.getBook());
+});
 
-        if (!bookById) {
-            res.statusCode = NOT_FOUND_STATUS_CODE;
-            res.json(NOT_FOUND_MESSAGE);
-            return;
-        }
+booksRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
+    const { id } = req.params;
+    const bookById = db.getBook(id);
 
-        res.json(bookById);
-    })
-    .post(ROUTES_BASE, (req, res) => {
-        const newBookParams = req.body as TBookParams;
-        const newBook = db.createBook(newBookParams);
+    if (!bookById) {
+        res.statusCode = NOT_FOUND_STATUS_CODE;
+        res.json(NOT_FOUND_MESSAGE);
+        return;
+    }
 
-        if (newBook instanceof DBError) {
-            res.statusCode = BAD_REQUEST_MESSAGE_STATUS_CODE;
-            res.json(newBook.errors);
-            return;
-        }
+    res.json(bookById);
+});
 
-        res.json(newBook);
-    })
-    .put(`${ROUTES_BASE}:id`, (req, res) => {
-        const { id } = req.params;
-        const newBookParams = req.body as TBookParams;
-        const updatedBook = db.updateBook(id, newBookParams);
+booksRoute.post(ROUTES_BASE, (req, res) => {
+    const newBookParams = req.body as TBookParams;
+    const newBook = db.createBook(newBookParams);
 
-        if (updatedBook === false) {
-            res.statusCode = NOT_FOUND_STATUS_CODE;
-            res.json(NOT_FOUND_MESSAGE);
-            return;
-        }
+    if (newBook instanceof DBError) {
+        res.statusCode = BAD_REQUEST_MESSAGE_STATUS_CODE;
+        res.json(newBook.errors);
+        return;
+    }
 
-        if (updatedBook instanceof DBError) {
-            res.statusCode = BAD_REQUEST_MESSAGE_STATUS_CODE;
-            res.json(updatedBook.errors);
-            return;
-        }
+    res.json(newBook);
+});
 
-        res.json(updatedBook);
-    })
-    .delete(`${ROUTES_BASE}:id`, (req, res) => {
-        const { id } = req.params;
-        const recordIsDelete = db.deleteBook(id);
+booksRoute.put(`${ROUTES_BASE}:id`, (req, res) => {
+    const { id } = req.params;
+    const newBookParams = req.body as TBookParams;
+    const updatedBook = db.updateBook(id, newBookParams);
 
-        if (!recordIsDelete) {
-            res.statusCode = NOT_FOUND_STATUS_CODE;
-            res.json(NOT_FOUND_MESSAGE);
-            return;
-        }
-         
-        res.json('ok');
-    });
+    if (updatedBook === false) {
+        res.statusCode = NOT_FOUND_STATUS_CODE;
+        res.json(NOT_FOUND_MESSAGE);
+        return;
+    }
+
+    if (updatedBook instanceof DBError) {
+        res.statusCode = BAD_REQUEST_MESSAGE_STATUS_CODE;
+        res.json(updatedBook.errors);
+        return;
+    }
+
+    res.json(updatedBook);
+});
+
+booksRoute.delete(`${ROUTES_BASE}:id`, (req, res) => {
+    const { id } = req.params;
+    const recordIsDelete = db.deleteBook(id);
+
+    if (!recordIsDelete) {
+        res.statusCode = NOT_FOUND_STATUS_CODE;
+        res.json(NOT_FOUND_MESSAGE);
+        return;
+    }
+        
+    res.json('ok');
+});
     
