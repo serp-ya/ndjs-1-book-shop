@@ -1,12 +1,9 @@
 import { Router } from 'express';
 import { db, DBError } from '@/database';
-import {
-    BAD_REQUEST_MESSAGE_STATUS_CODE,
-    NOT_FOUND_MESSAGE,
-    NOT_FOUND_STATUS_CODE,
-    ROUTES_BASE,
-} from '@/routes';
-import { TBookParams } from '@/models';
+import { EStatusCodes, NOT_FOUND_MESSAGE, ROUTES_BASE } from '@/routes';
+import { Book } from '@/models';
+import { downloadBooksMiddleware } from './books-middlewares';
+import { getFilePathByFileName, recoverOriginalFilename } from './books-utils';
 
 export const booksRoute = Router();
 
@@ -19,7 +16,7 @@ booksRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
     const bookById = db.getBook(id);
 
     if (!bookById) {
-        res.statusCode = NOT_FOUND_STATUS_CODE;
+        res.statusCode = EStatusCodes.NotFound;
         res.json(NOT_FOUND_MESSAGE);
         return;
     }
@@ -27,12 +24,33 @@ booksRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
     res.json(bookById);
 });
 
-booksRoute.post(ROUTES_BASE, (req, res) => {
-    const newBookParams = req.body as TBookParams;
-    const newBook = db.createBook(newBookParams);
+booksRoute.get(`${ROUTES_BASE}:id/download`, (req, res) => {
+    const { id } = req.params;
+    const bookById = db.getBook(id);
+
+    if (!bookById) {
+        res.statusCode = EStatusCodes.NotFound;
+        res.json(NOT_FOUND_MESSAGE);
+        return;
+    }
+
+    const { fileName } = bookById as Book;
+
+    res.download(
+        getFilePathByFileName(fileName),
+        recoverOriginalFilename(fileName),
+        (err) => err && res.status(EStatusCodes.NotFound).json(NOT_FOUND_MESSAGE)
+    );
+});
+
+booksRoute.post(ROUTES_BASE, downloadBooksMiddleware, (req, res) => {
+    const { key, ...newBookParams } = req.body;
+    const fileName = req?.file?.filename;
+
+    const newBook = db.createBook({ ...newBookParams, fileName });
 
     if (newBook instanceof DBError) {
-        res.statusCode = BAD_REQUEST_MESSAGE_STATUS_CODE;
+        res.statusCode = EStatusCodes.BadRequest;
         res.json(newBook.errors);
         return;
     }
@@ -40,19 +58,33 @@ booksRoute.post(ROUTES_BASE, (req, res) => {
     res.json(newBook);
 });
 
-booksRoute.put(`${ROUTES_BASE}:id`, (req, res) => {
+/*
+* Unfortunately we have a issue with form-data handling and `multer` middleware
+* and need to use multer instance with every route, who use form-data.
+*
+* However, this route can get new file for updating Book instance
+* and multer instance usage with this route is good idea.
+*
+* https://github.com/expressjs/multer/issues/952
+*/
+booksRoute.put(`${ROUTES_BASE}:id`, downloadBooksMiddleware, (req, res) => {
     const { id } = req.params;
-    const newBookParams = req.body as TBookParams;
+    const { key, ...newBookParams } = req.body;
+    const fileName = req?.file?.filename;
+
+    if (fileName) {
+        Object.assign(newBookParams, { fileName })
+    }
     const updatedBook = db.updateBook(id, newBookParams);
 
     if (updatedBook === false) {
-        res.statusCode = NOT_FOUND_STATUS_CODE;
+        res.statusCode = EStatusCodes.NotFound;
         res.json(NOT_FOUND_MESSAGE);
         return;
     }
 
     if (updatedBook instanceof DBError) {
-        res.statusCode = BAD_REQUEST_MESSAGE_STATUS_CODE;
+        res.statusCode = EStatusCodes.BadRequest;
         res.json(updatedBook.errors);
         return;
     }
@@ -65,7 +97,7 @@ booksRoute.delete(`${ROUTES_BASE}:id`, (req, res) => {
     const recordIsDelete = db.deleteBook(id);
 
     if (!recordIsDelete) {
-        res.statusCode = NOT_FOUND_STATUS_CODE;
+        res.statusCode = EStatusCodes.NotFound;
         res.json(NOT_FOUND_MESSAGE);
         return;
     }
