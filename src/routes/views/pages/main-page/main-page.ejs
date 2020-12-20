@@ -1,0 +1,9 @@
+<% if(!books || books.length === 0) { %>
+    <h2>Добавьте книги</h2>
+<% } else {
+    books.forEach(book => {
+%>
+    <%- include('../../components/book-card/index', { book }) -%>
+<%
+    });
+} %>

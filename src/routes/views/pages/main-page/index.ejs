@@ -1,0 +1,15 @@
+<%
+const templatePath = '../../components/main-template/index';
+const pageTemplatePath = './main-page';
+const pageTemplateData = { books };
+%>
+
+<%-
+include(
+    templatePath,
+    {
+        content: include(pageTemplatePath, pageTemplateData),
+        title,
+    }
+)
+-%>
