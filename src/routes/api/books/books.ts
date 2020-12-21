@@ -1,10 +1,13 @@
-import fs from 'fs';
 import { Router } from 'express';
-import { db, DBError } from '@/database';
+import { db } from '@/database';
 import { EStatusCodes, NOT_FOUND_MESSAGE, ROUTES_BASE } from '@/routes';
+import { createBook, deleteBook, editBook } from '@/routes/utils/books';
 import { Book } from '@/models';
-import { downloadBooksMiddleware } from './books-middlewares';
-import { getFilePathByFileName, generateSecretFilename } from './books-utils';
+import {
+    downloadBooksMiddleware,
+    getFilePathByFileName,
+    generateSecretFilename,
+} from '@/middlewares/download-book';
 
 export const booksRoute = Router();
 
@@ -46,18 +49,12 @@ booksRoute.get(`${ROUTES_BASE}:id/download`, (req, res) => {
 });
 
 booksRoute.post(ROUTES_BASE, downloadBooksMiddleware, (req, res) => {
-    const { key, ...newBookParams } = req.body;
-    const fileName = req.file?.originalname;
-
-    const newBook = db.createBook({ ...newBookParams, fileName });
-
-    if (newBook instanceof DBError) {
-        res.statusCode = EStatusCodes.BadRequest;
-        res.json(newBook.errors);
-        return;
-    }
-
-    res.json(newBook);
+    createBook(req)
+        .then(newBook => res.json(newBook))
+        .catch(errors => {
+            res.statusCode = EStatusCodes.BadRequest;
+            res.json(errors);
+        });
 });
 
 /*
@@ -70,51 +67,27 @@ booksRoute.post(ROUTES_BASE, downloadBooksMiddleware, (req, res) => {
 * https://github.com/expressjs/multer/issues/952
 */
 booksRoute.put(`${ROUTES_BASE}:id`, downloadBooksMiddleware, (req, res) => {
-    const { id } = req.params;
-    const { key, ...newBookParams } = req.body;
-    const fileName = req.file?.filename;
+    editBook(req)
+        .then(updatedBook => res.json(updatedBook))
+        .catch(errors => {
+            if (errors === false) {
+                res.statusCode = EStatusCodes.NotFound;
+                res.json(NOT_FOUND_MESSAGE);
+                return;
+            }
 
-    if (fileName) {
-        Object.assign(newBookParams, { fileName })
-    }
-    const prevBook = db.getBook(id) as Book;
-    const updatedBook = db.updateBook(id, newBookParams);
-
-    if (updatedBook === false) {
-        res.statusCode = EStatusCodes.NotFound;
-        res.json(NOT_FOUND_MESSAGE);
-        return;
-    }
-
-    if (updatedBook instanceof DBError) {
-        res.statusCode = EStatusCodes.BadRequest;
-        res.json(updatedBook.errors);
-        return;
-    }
-    const prevSecretFileName = generateSecretFilename(prevBook.fileName, prevBook);
-    const newSecretFileName = generateSecretFilename((updatedBook as Book).fileName, updatedBook as Book);
-
-    fs.promises.rename(
-        getFilePathByFileName(prevSecretFileName),
-        getFilePathByFileName(newSecretFileName),
-    )
-    .then(() => res.json(updatedBook))
-    .catch(err => {
-        db.updateBook(id, prevBook);
-        throw err;
-    });
+            res.statusCode = EStatusCodes.BadRequest;
+            res.json(errors);
+            return;
+        })
 });
 
 booksRoute.delete(`${ROUTES_BASE}:id`, (req, res) => {
-    const { id } = req.params;
-    const recordIsDelete = db.deleteBook(id);
-
-    if (!recordIsDelete) {
-        res.statusCode = EStatusCodes.NotFound;
-        res.json(NOT_FOUND_MESSAGE);
-        return;
-    }
-        
-    res.json('ok');
+    deleteBook(req)
+        .then(status => res.json(status))
+        .catch(() => {
+            res.statusCode = EStatusCodes.NotFound;
+            res.json(NOT_FOUND_MESSAGE);
+        });
 });
     

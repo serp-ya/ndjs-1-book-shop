@@ -2,7 +2,7 @@
     <% if (!isSingle) { %>
         <a
             alt="Open book: <%= title %>"
-            class="book-card__link"
+            class="btn btn-primary book-card__btn"
             href="/book/<%= id %>"
         >
             <span>Open</span>
@@ -10,14 +10,14 @@
     <% } %>
     <a
         alt="Edit book: <%= title %>"
-        class="book-card__link"
+        class="btn btn-warning book-card__btn"
         href="/book/edit/<%= id %>"
     >
         <span>Edit</span>
     </a>
     <a
         alt="Delete book: <%= title %>"
-        class="book-card__link"
+        class="btn btn-danger book-card__btn"
         href="/book/delete/<%= id %>"
     >
         <span>Delete</span>

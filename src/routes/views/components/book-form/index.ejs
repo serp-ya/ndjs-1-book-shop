@@ -1,0 +1,45 @@
+<%
+    const { book = {}, btnText } = locals;
+    const {
+        authors,
+        description,
+        fileCover,
+        title,
+    } = book;
+%>
+
+<div class="row book-form">
+    <form
+        class="book-form__form"
+        enctype="multipart/form-data"
+        method="POST"
+    >
+        <div class="col-6">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" id="title" name="title" value="<%= title %>"/>
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="description">Description</label>
+            <input class="form-control" id="description" name="description" value="<%= description %>" />
+        </div>
+        <div class="col-6">
+            
+            <label class="form-label" for="authors">Authors</label>
+            <input class="form-control" id="authors" name="authors" value="<%= authors %>" />
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="fileCover">Cover</label>
+            <input class="form-control" id="fileCover" name="fileCover" value="<%= fileCover %>" />
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="fileBook">Book file</label>
+            <input class="form-control" id="fileBook" name="fileBook" type="file" />
+        </div>
+
+        <div class="book-form__actions">
+            <button type="submit" class="btn btn-primary">
+                <%= btnText %>
+            </button>
+        </div>
+    </form>
+</div>

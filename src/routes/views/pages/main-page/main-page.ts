@@ -8,7 +8,7 @@ export const mainPageRoute = Router();
 mainPageRoute.get(ROUTES_BASE, (req, res) => {
     const books = db.getBook();
 
-    const templatePath = path.join(__dirname, 'index.ejs');
+    const templatePath = path.join(__dirname, './template/index.ejs');
     const templateData = {
         books,
         title: 'Книги',

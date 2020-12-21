@@ -3,8 +3,9 @@
     padding-top: 50px;
 }
 
-.book-card {
-    padding: 10px;
+.main-page__actions {
+    padding-top: 85px;
+    padding-bottom: 50px;
 }
 
 .book-card--single {
@@ -29,25 +30,15 @@
     width: 100%;
 }
 
-.book-card__link {
-    background-color: rgb(0, 0, 192);
-    border-radius: 5px;
-    color: white;
-    display: block;
-    font-weight: bold;
+.book-card__btn {
     margin-right: 15px;
-    padding: 10px 20px;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.book-card__link:hover {
-    background-color: blue;
-    box-shadow: 2px 3px 5px 0px black;
-    color: white;
-    transition: 0.2s;
 }
 
 .book-card__actions {
     display: flex;
+}
+
+.book-form__actions {
+    padding-top: 50px;
+    padding-bottom: 30px;
 }
