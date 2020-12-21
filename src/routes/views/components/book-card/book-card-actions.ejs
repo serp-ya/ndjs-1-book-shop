@@ -1,0 +1,25 @@
+<div class="book-card__actions">
+    <% if (!isSingle) { %>
+        <a
+            alt="Open book: <%= title %>"
+            class="book-card__link"
+            href="/book/<%= id %>"
+        >
+            <span>Open</span>
+        </a>
+    <% } %>
+    <a
+        alt="Edit book: <%= title %>"
+        class="book-card__link"
+        href="/book/edit/<%= id %>"
+    >
+        <span>Edit</span>
+    </a>
+    <a
+        alt="Delete book: <%= title %>"
+        class="book-card__link"
+        href="/book/delete/<%= id %>"
+    >
+        <span>Delete</span>
+    </a>
+</div>

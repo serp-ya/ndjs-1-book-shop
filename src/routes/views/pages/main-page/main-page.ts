@@ -7,13 +7,14 @@ export const mainPageRoute = Router();
 
 mainPageRoute.get(ROUTES_BASE, (req, res) => {
     const books = db.getBook();
-    const pageData = {
+
+    const templatePath = path.join(__dirname, 'index.ejs');
+    const templateData = {
         books,
         title: 'Книги',
     };
-    const templatePath = path.join(__dirname, 'index.ejs');
 
-    res.renderPage(templatePath, pageData)
+    res.renderPage(templatePath, templateData)
         .catch(error => {
             res.statusCode = EStatusCodes.InternalError;
             res.json(error);

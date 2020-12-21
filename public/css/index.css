@@ -1,0 +1,53 @@
+.main-page {
+    padding-bottom: 80px;
+    padding-top: 50px;
+}
+
+.book-card {
+    padding: 10px;
+}
+
+.book-card--single {
+    display: flex;
+}
+
+.book-card--single .book-card__content {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.book-card__title {
+    padding-bottom: 10px;
+    padding-top: 15px;
+}
+
+.book-card__cover {
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    max-width: 350px;
+    width: 100%;
+}
+
+.book-card__link {
+    background-color: rgb(0, 0, 192);
+    border-radius: 5px;
+    color: white;
+    display: block;
+    font-weight: bold;
+    margin-right: 15px;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.book-card__link:hover {
+    background-color: blue;
+    box-shadow: 2px 3px 5px 0px black;
+    color: white;
+    transition: 0.2s;
+}
+
+.book-card__actions {
+    display: flex;
+}
