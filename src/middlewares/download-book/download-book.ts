@@ -3,8 +3,8 @@ import {
   BOOKS_AVAILABLE_FILETYPES,
   BOOKS_FILE_FIELDNAME,
   BOOKS_FOLDER_PATH,
-} from './books-constants';
-import { generateSecretFilename } from './books-utils';
+} from './download-book-constants';
+import { generateSecretFilename } from './download-book-utils';
 
 const downloadBooksFileFilter = (req, file, cb) => {
   const fileIsAvalibleByType = BOOKS_AVAILABLE_FILETYPES.some(availableType => (

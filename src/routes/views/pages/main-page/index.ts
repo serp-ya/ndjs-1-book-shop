@@ -1,0 +1,1 @@
+export { mainPageRoute } from './main-page';

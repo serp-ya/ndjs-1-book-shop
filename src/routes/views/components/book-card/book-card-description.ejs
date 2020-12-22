@@ -1,0 +1,11 @@
+<%
+  const descriptionChars = Array.from(description);
+  const needToCutDescription = typeof descriptionLengthLimit === 'number' && descriptionChars.length > descriptionLengthLimit;
+  const formattedDescription =  needToCutDescription
+    ? descriptionChars.slice(0, descriptionLengthLimit).join('') + '...'
+    : description;
+%>
+
+<p>
+    <%= formattedDescription %>
+</p>

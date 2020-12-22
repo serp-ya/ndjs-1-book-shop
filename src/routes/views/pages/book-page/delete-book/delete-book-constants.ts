@@ -1,0 +1,1 @@
+export const BOOK_DELETE_PAGE_PATH_NAME = 'delete';

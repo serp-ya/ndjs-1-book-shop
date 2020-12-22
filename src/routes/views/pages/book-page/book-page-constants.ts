@@ -1,0 +1,1 @@
+export const BOOK_PAGE_ROUTE_NAME = 'book';

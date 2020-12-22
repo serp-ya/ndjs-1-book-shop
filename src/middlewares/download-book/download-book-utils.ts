@@ -1,7 +1,7 @@
 import path from 'path';
 import crypto from 'crypto';
 import { TBookParams } from '@/models';
-import { BOOKS_FILENAME_DELIMETER, BOOKS_FOLDER_PATH } from './books-constants';
+import { BOOKS_FILENAME_DELIMETER, BOOKS_FOLDER_PATH } from './download-book-constants';
 
 const generateBookFilenamePrefix = (bookInfo: Partial<TBookParams>): string => {
     const md5Sum = crypto.createHash('md5');
