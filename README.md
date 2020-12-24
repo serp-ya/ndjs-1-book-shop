@@ -157,7 +157,7 @@
 В исходном коде приложения должен появиться docker-compose.yml
 
 #### Решение задания 2.4.2
-- был создан сервис (https://github.com/serp-ya/ndjs-1-book-shop-views-counter)[https://github.com/serp-ya/ndjs-1-book-shop-views-counter] и помещён в docker hub в репозиторий `serpya/book-shop-views-counter`
+- был создан сервис https://github.com/serp-ya/ndjs-1-book-shop-views-counter и помещён в docker hub в репозиторий `serpya/book-shop-views-counter`
 - в основном приложении была доработана логика запросов к сервису и логика отображения счётчика
 - был создан docker-compose.yml файл и протестирован на локальной машине
 
@@ -167,4 +167,22 @@
 Опубликуйте докеризированные приложения на heroku, используя способ развёртывания через контейнеры. 
 
 ### Критерии выполнения
-Приложение опубликовано на heroku путём публикации контейнера, используя heroku cli. 
+Приложение опубликовано на heroku путём публикации контейнера, используя heroku cli.
+
+#### Решение задания 2.4.2
+Было добавлено два приложения в heroku:
+- https://ndjs-1-book-shop-docker.herokuapp.com/
+- https://ndjs-1-book-view-count-docker.herokuapp.com/
+
+Тип каждого приложения был изменён на `container` при помощи команд:
+- `heroku stack:set container --app ndjs-1-book-shop-docker`
+- `heroku stack:set container --app ndjs-1-book-view-count-docker`
+
+Метод деплоя был выбран при помощи гитхаб с указанием веток:
+- `https://github.com/serp-ya/ndjs-1-book-shop:dockerizing`-> `https://ndjs-1-book-shop-docker.herokuapp.com/`
+- `https://github.com/serp-ya/ndjs-1-book-shop-views-counter:master` -> `https://ndjs-1-book-view-count-docker.herokuapp.com/`
+
+В приложении `https://ndjs-1-book-shop-docker.herokuapp.com/` была добавлена переменная локального окружения через настройки heroku `VIEW_COUNTER_URL=https://ndjs-1-book-view-count-docker.herokuapp.com`
+![](http://dl3.joxi.net/drive/2020/12/24/0001/2133/88149/49/045aa75b06.png)
+
+Работоспособность приложение и их взаимодействие можно проверить по указанным выше ссылкам на сервисы heroku
