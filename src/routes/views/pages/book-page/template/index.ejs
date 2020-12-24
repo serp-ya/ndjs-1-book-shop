@@ -1,3 +1,7 @@
+<%
+  const { viewsCounter } = locals;
+%>
+
 <%-
 include(
     '../../../components/main-template/index',
@@ -7,6 +11,7 @@ include(
             { book },
         ),
         title,
+        viewsCounter,
     }
 )
 -%>

@@ -2,7 +2,9 @@ import { Router } from 'express';
 import path from 'path';
 import { db } from '@/database';
 import { Book } from '@/models';
-import { EStatusCodes, NOT_FOUND_MESSAGE, ROUTES_BASE } from '@/routes';
+import { NOT_FOUND_MESSAGE, ROUTES_BASE } from '../../../routes-constants';
+import { EStatusCodes } from '../../../routes-enums';
+import { getBookViewsCounter } from '../../../utils/book-views-counter';
 import { BOOK_CREATE_PAGE_PATH_NAME, createBookPageRoute } from './create-book';
 import { BOOK_DELETE_PAGE_PATH_NAME, deleteBookPageRoute } from './delete-book';
 import { BOOK_EDIT_PAGE_PATH_NAME, editBookPageRoute } from './edit-book';
@@ -13,7 +15,7 @@ bookPageRoute.use(`/${BOOK_CREATE_PAGE_PATH_NAME}`, createBookPageRoute);
 bookPageRoute.use(`/${BOOK_DELETE_PAGE_PATH_NAME}`, deleteBookPageRoute);
 bookPageRoute.use(`/${BOOK_EDIT_PAGE_PATH_NAME}`, editBookPageRoute);
 
-bookPageRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
+bookPageRoute.get(`${ROUTES_BASE}:id`, async (req, res) => {
     const { id } = req.params;
     const bookById = db.getBook(id) as Book;
 
@@ -28,6 +30,14 @@ bookPageRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
         book: bookById,
         title: bookById.title,
     };
+
+    try {
+        const viewsCounter = await getBookViewsCounter(id);
+        Object.assign(templateData, { viewsCounter });
+    } catch (error) {
+        process.stdout.write('Try to get book\'s view counter\n');
+        process.stdout.write(JSON.stringify(error));
+    }
 
     res.renderPage(templatePath, templateData)
         .catch(error => {
