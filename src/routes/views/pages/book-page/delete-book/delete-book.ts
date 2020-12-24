@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { EStatusCodes, NOT_FOUND_MESSAGE, ROUTES_BASE } from '@/routes';
-import { deleteBook } from '@/routes/utils/books';
+import { NOT_FOUND_MESSAGE, ROUTES_BASE } from '../../../../routes-constants';
+import { EStatusCodes } from '../../../../routes-enums';
+import { deleteBook } from '../../../../utils/books';
 
 export const deleteBookPageRoute = Router();
 

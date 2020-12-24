@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ROUTES_BASE } from '@/routes';
+import { ROUTES_BASE } from '../../routes-constants';
 import { LOGIN_DEFAULT_STATUS_CODE, LOGIN_DEFAULT_RESPONSE } from './login-constants';
 
 export const loginRoute = Router();

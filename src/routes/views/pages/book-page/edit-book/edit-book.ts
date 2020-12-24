@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import path from 'path';
 import { db } from '@/database';
-import { EStatusCodes, NOT_FOUND_MESSAGE, ROUTES_BASE } from '@/routes';
-import { editBook } from '@/routes/utils/books';
 import { Book } from '@/models';
 import { downloadBooksMiddleware } from '@/middlewares/download-book';
+import { NOT_FOUND_MESSAGE, ROUTES_BASE } from '../../../../routes-constants';
+import { EStatusCodes } from '../../../../routes-enums';
+import { editBook } from '../../../../utils/books';
 
 export const editBookPageRoute = Router();
 

@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import path from 'path';
 import { db } from '@/database';
-import { EStatusCodes, ROUTES_BASE } from '@/routes';
+import { ROUTES_BASE } from '../../../routes-constants';
+import { EStatusCodes } from '../../../routes-enums';
 
 export const mainPageRoute = Router();
 
