@@ -5,7 +5,7 @@ services:
     environment:
       PORT: 5500
   book-shop:
-    image: serpya/book-shop-compose
+    image: serpya/book-shop
     ports:
     - "5000:5000"
     environment:
