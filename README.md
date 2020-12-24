@@ -156,6 +156,11 @@
 
 В исходном коде приложения должен появиться docker-compose.yml
 
+#### Решение задания 2.4.2
+- был создан сервис (https://github.com/serp-ya/ndjs-1-book-shop-views-counter)[https://github.com/serp-ya/ndjs-1-book-shop-views-counter] и помещён в docker hub в репозиторий `serpya/book-shop-views-counter`
+- в основном приложении была доработана логика запросов к сервису и логика отображения счётчика
+- был создан docker-compose.yml файл и протестирован на локальной машине
+
 
 ## Задание 2.4.3 - Микросервисы
 
