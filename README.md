@@ -169,7 +169,7 @@
 ### Критерии выполнения
 Приложение опубликовано на heroku путём публикации контейнера, используя heroku cli.
 
-#### Решение задания 2.4.2
+#### Решение задания 2.4.3
 Было добавлено два приложения в heroku:
 - https://ndjs-1-book-shop-docker.herokuapp.com/
 - https://ndjs-1-book-view-count-docker.herokuapp.com/
