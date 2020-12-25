@@ -1,0 +1,1 @@
+export { getBookViewsCounter } from './book-views-counter';

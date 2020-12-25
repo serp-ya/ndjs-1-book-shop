@@ -1,4 +1,5 @@
 <%
+  const { viewsCounter } = locals;
   const {
     authors,
     description,
@@ -19,6 +20,9 @@
             <h3 class="book-card__title">
                 <%= book.title %>
             </h3>
+            <% if (viewsCounter) { %>
+                <div>Views: <%= viewsCounter %></div>
+            <% } %>
             <p>
                 <%= authors %>
             </p>

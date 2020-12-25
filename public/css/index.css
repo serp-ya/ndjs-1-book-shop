@@ -42,3 +42,21 @@
     padding-top: 50px;
     padding-bottom: 30px;
 }
+
+.logo {
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.logo__link {
+    color: black;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.logo__link:hover {
+    color: black;
+}
