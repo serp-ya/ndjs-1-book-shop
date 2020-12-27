@@ -9,6 +9,7 @@ services:
 
   book-shop:
     image: serpya/book-shop
+    build: .
     ports:
       - "5000:5000"
     env_file:
@@ -18,3 +19,4 @@ services:
       VIEW_COUNTER_URL: http://book-shop-views-counter:5500
     volumes:
       - .\src:/app/src
+      - .\public:/app/public
