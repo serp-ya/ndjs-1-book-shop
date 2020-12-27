@@ -186,3 +186,54 @@
 ![](http://dl3.joxi.net/drive/2020/12/24/0001/2133/88149/49/045aa75b06.png)
 
 Работоспособность приложение и их взаимодействие можно проверить по указанным выше ссылкам на сервисы heroku
+
+
+# Домашнее задание к занятию «2.5 База данных и хранение данных»
+
+#### Задание 1
+Чтобы в будущем вам было легче работать с **MongoDB**, изучите раздел 
+документации про использование [**CRUD Operations**](https://docs.mongodb.com/manual/crud/)
+
+#### Решение задания 2.5.1
+Я прочитал документацию, но для большей уверенности в своих действиях, я установил локально MongoDB и использовал MongoDB for VSCode Playground, откуда можно выполнять запросы к локальной БД.
+
+
+#### Задание 2
+В файле **README.md** написать следующие запросы для **MongoDB**:
+ - запрос(ы) для *вставки* данных минимум о двух книгах в коллекцию **books**
+ - запрос для *поиска* полей документов коллекции **books** по полю *title*
+ - запрос для *редактирования* полей: *description* и *authors* коллекции **books** по *_id* записи
+ 
+*Каждый документ коллекции **books** должен содержать следующую структуру данных: 
+```javascript
+{
+  title: "string",
+  description: "string",
+  authors: "string"
+}
+``` 
+
+#### Решение задания 2.5.2
+- запрос(ы) для *вставки* данных минимум о двух книгах в коллекцию **books**
+```
+db.books.insertMany([
+  { '_id': 111, 'title': 'first title', 'description': 'first description', 'authors': 'first authors'},
+  { '_id': 222,'title': 'second title', 'description': 'second description', 'authors': 'second authors'},
+]);
+```
+
+- запрос для *поиска* полей документов коллекции **books** по полю *title*
+```
+db.books.find({ 'title': 'second title' });
+```
+
+- запрос для *редактирования* полей: *description* и *authors* коллекции **books** по *_id* записи
+```
+db.books.updateOne(
+  { _id: 111 },
+  { $set: {
+    'description': 'first updated description',
+    'authors': 'first updated authors'
+  }}
+);
+```
