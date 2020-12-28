@@ -2,15 +2,21 @@ version: "3.9"
 services:
   book-shop-views-counter:
     image: serpya/book-shop-views-counter
+    env_file:
+      - ./.env
     environment:
       PORT: 5500
-    volumes:
-      - .\src\database\db-counter.json:/app/src/database/db.json
 
   book-shop:
     image: serpya/book-shop
+    build: .
     ports:
       - "5000:5000"
+    env_file:
+      - ./.env
     environment:
       PORT: 5000
       VIEW_COUNTER_URL: http://book-shop-views-counter:5500
+    volumes:
+      - .\src:/app/src
+      - .\public:/app/public

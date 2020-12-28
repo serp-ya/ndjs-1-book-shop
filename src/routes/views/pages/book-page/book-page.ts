@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import path from 'path';
-import { db } from '@/database';
-import { Book } from '@/models';
+import { Book, getBook } from '@/database/book';
 import { NOT_FOUND_MESSAGE, ROUTES_BASE } from '../../../routes-constants';
 import { EStatusCodes } from '../../../routes-enums';
 import { getBookViewsCounter } from '../../../utils/book-views-counter';
@@ -17,7 +16,7 @@ bookPageRoute.use(`/${BOOK_EDIT_PAGE_PATH_NAME}`, editBookPageRoute);
 
 bookPageRoute.get(`${ROUTES_BASE}:id`, async (req, res) => {
     const { id } = req.params;
-    const bookById = db.getBook(id) as Book;
+    const bookById = await getBook(id) as Book;
 
     if (!bookById) {
         res.statusCode = EStatusCodes.NotFound;

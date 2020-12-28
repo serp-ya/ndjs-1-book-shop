@@ -1,11 +1,7 @@
 import { Router } from 'express';
-import { db } from '@/database';
-import { Book } from '@/models';
-import {
-    downloadBooksMiddleware,
-    getFilePathByFileName,
-    generateSecretFilename,
-} from '@/middlewares/download-book';
+import { Book, getBook } from '@/database/book';
+import { getBookFileName } from '@/database/book-file';
+import { downloadBooksMiddleware, getPathForBookFile } from '@/middlewares/download-book';
 import { NOT_FOUND_MESSAGE, ROUTES_BASE } from '../../routes-constants';
 import { EStatusCodes } from '../../routes-enums';
 import { createBook, deleteBook, editBook } from '../../utils/books';
@@ -13,37 +9,39 @@ import { createBook, deleteBook, editBook } from '../../utils/books';
 export const booksRoute = Router();
 
 booksRoute.get(ROUTES_BASE, (_, res) => {
-    res.json(db.getBook());
+    getBook()
+        .then(book => res.json(book))
+        .catch(error => {
+            res.status(EStatusCodes.BadRequest);
+            res.json(error);
+        });
 });
 
 booksRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
     const { id } = req.params;
-    const bookById = db.getBook(id);
 
-    if (!bookById) {
-        res.statusCode = EStatusCodes.NotFound;
-        res.json(NOT_FOUND_MESSAGE);
-        return;
-    }
-
-    res.json(bookById);
+    getBook(id)
+        .then(book => res.json(book))
+        .catch(error => {
+            res.status(EStatusCodes.BadRequest);
+            res.json(error);
+        });
 });
 
-booksRoute.get(`${ROUTES_BASE}:id/download`, (req, res) => {
+booksRoute.get(`${ROUTES_BASE}:id/download`, async (req, res) => {
     const { id } = req.params;
-    const bookById = db.getBook(id) as Book;
+    const { fileName } = await getBook(id) as Book;
 
-    if (!bookById) {
+    if (!fileName) {
         res.statusCode = EStatusCodes.NotFound;
         res.json(NOT_FOUND_MESSAGE);
         return;
     }
 
-    const { fileName } = bookById;
-    const secretFileName = generateSecretFilename(fileName, bookById);
+    const secretFileName = await getBookFileName(id);
 
     res.download(
-        getFilePathByFileName(secretFileName),
+        getPathForBookFile(secretFileName || ''),
         fileName,
         (err) => err && res.status(EStatusCodes.NotFound).json(NOT_FOUND_MESSAGE)
     );
@@ -52,9 +50,9 @@ booksRoute.get(`${ROUTES_BASE}:id/download`, (req, res) => {
 booksRoute.post(ROUTES_BASE, downloadBooksMiddleware, (req, res) => {
     createBook(req)
         .then(newBook => res.json(newBook))
-        .catch(errors => {
-            res.statusCode = EStatusCodes.BadRequest;
-            res.json(errors);
+        .catch(error => {
+            res.status(EStatusCodes.BadRequest);
+            res.json(error);
         });
 });
 
@@ -71,15 +69,8 @@ booksRoute.put(`${ROUTES_BASE}:id`, downloadBooksMiddleware, (req, res) => {
     editBook(req)
         .then(updatedBook => res.json(updatedBook))
         .catch(errors => {
-            if (errors === false) {
-                res.statusCode = EStatusCodes.NotFound;
-                res.json(NOT_FOUND_MESSAGE);
-                return;
-            }
-
             res.statusCode = EStatusCodes.BadRequest;
             res.json(errors);
-            return;
         })
 });
 

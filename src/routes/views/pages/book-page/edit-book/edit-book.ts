@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import path from 'path';
-import { db } from '@/database';
-import { Book } from '@/models';
+import { Book, getBook } from '@/database/book';
 import { downloadBooksMiddleware } from '@/middlewares/download-book';
 import { NOT_FOUND_MESSAGE, ROUTES_BASE } from '../../../../routes-constants';
 import { EStatusCodes } from '../../../../routes-enums';
@@ -9,9 +8,9 @@ import { editBook } from '../../../../utils/books';
 
 export const editBookPageRoute = Router();
 
-editBookPageRoute.get(`${ROUTES_BASE}:id`, (req, res) => {
+editBookPageRoute.get(`${ROUTES_BASE}:id`, async (req, res) => {
     const { id } = req.params;
-    const bookById = db.getBook(id) as Book;
+    const bookById = await getBook(id) as Book;
 
     if (!bookById) {
         res.statusCode = EStatusCodes.NotFound;
@@ -36,14 +35,7 @@ editBookPageRoute.post(`${ROUTES_BASE}:id`, downloadBooksMiddleware, (req, res) 
     editBook(req)
         .then(() => res.redirect(ROUTES_BASE))
         .catch(errors => {
-            if (errors === false) {
-                res.statusCode = EStatusCodes.NotFound;
-                res.json(NOT_FOUND_MESSAGE);
-                return;
-            }
-
             res.statusCode = EStatusCodes.BadRequest;
             res.json(errors);
-            return;
         });
 });
