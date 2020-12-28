@@ -7,24 +7,28 @@ import { createBook } from '../../../../utils/books';
 
 export const createBookPageRoute = Router();
 
-createBookPageRoute.get(ROUTES_BASE, (req, res) => {
+createBookPageRoute.get(ROUTES_BASE, async (req, res) => {
     const templatePath = path.join(__dirname, './template/index.ejs');
     const templateData = {
         title: 'Добавить новую книгу',
     };
 
-    res.renderPage(templatePath, templateData)
-        .catch(error => {
-            res.statusCode = EStatusCodes.InternalError;
-            res.json(error);
-        });
+    try {
+        await res.renderPage(templatePath, templateData);
+    
+    } catch (error) {
+        res.statusCode = EStatusCodes.BadRequest;
+        res.json(error);
+    }
 });
 
-createBookPageRoute.post(ROUTES_BASE, downloadBooksMiddleware, (req, res) => {
-    createBook(req)
-        .then(_ => res.redirect(ROUTES_BASE))
-        .catch(errors => {
-            res.statusCode = EStatusCodes.BadRequest;
-            res.json(errors);
-        });
+createBookPageRoute.post(ROUTES_BASE, downloadBooksMiddleware, async (req, res) => {
+    try {
+        await createBook(req);
+        res.redirect(ROUTES_BASE);
+
+    } catch (error) {
+        res.status(EStatusCodes.InternalError);
+        res.json(error);
+    }
 });

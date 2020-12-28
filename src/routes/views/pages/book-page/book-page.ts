@@ -16,31 +16,38 @@ bookPageRoute.use(`/${BOOK_EDIT_PAGE_PATH_NAME}`, editBookPageRoute);
 
 bookPageRoute.get(`${ROUTES_BASE}:id`, async (req, res) => {
     const { id } = req.params;
-    const bookById = await getBook(id) as Book;
-
-    if (!bookById) {
-        res.statusCode = EStatusCodes.NotFound;
-        res.json(NOT_FOUND_MESSAGE);
-        return;
-    }
-
-    const templatePath = path.join(__dirname, './template/index.ejs');
-    const templateData = {
-        book: bookById,
-        title: bookById.title,
-    };
 
     try {
-        const viewsCounter = await getBookViewsCounter(id);
-        Object.assign(templateData, { viewsCounter });
-    } catch (error) {
-        process.stdout.write('Try to get book\'s view counter\n');
-        process.stdout.write(JSON.stringify(error));
-    }
+        const bookById = await getBook(id) as Book;
+    
+        if (!bookById) {
+            res.statusCode = EStatusCodes.NotFound;
+            res.json(NOT_FOUND_MESSAGE);
+            return;
+        }
+    
+        const templatePath = path.join(__dirname, './template/index.ejs');
+        const templateData = {
+            book: bookById,
+            title: bookById.title,
+        };
+    
+        try {
+            const viewsCounter = await getBookViewsCounter(id);
+            Object.assign(templateData, { viewsCounter });
+        } catch (error) {
+            process.stdout.write('Try to get book\'s view counter\n');
+            process.stdout.write(JSON.stringify(error));
+        }
+    
+        res.renderPage(templatePath, templateData)
+            .catch(error => {
+                res.statusCode = EStatusCodes.InternalError;
+                res.json(error);
+            });
 
-    res.renderPage(templatePath, templateData)
-        .catch(error => {
-            res.statusCode = EStatusCodes.InternalError;
-            res.json(error);
-        });
+    } catch (error) {
+        res.status(EStatusCodes.InternalError);
+        res.json(error);
+    }
 });

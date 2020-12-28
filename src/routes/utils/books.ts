@@ -12,11 +12,10 @@ export const createBook = async (req) => {
     return newBook;
 };
 
-export const deleteBook = (req) => new Promise((done, fail) => (
+export const deleteBook = (req) => (
     deleteBookMongo(req.params.id)
-        .then(() => done('ok'))
-        .catch(() => fail())
-));
+        .then(() => 'ok')
+);
 
 export const editBook = async (req) => {
     const { id } = req.params;

@@ -10,32 +10,41 @@ export const editBookPageRoute = Router();
 
 editBookPageRoute.get(`${ROUTES_BASE}:id`, async (req, res) => {
     const { id } = req.params;
-    const bookById = await getBook(id) as Book;
 
-    if (!bookById) {
-        res.statusCode = EStatusCodes.NotFound;
-        res.json(NOT_FOUND_MESSAGE);
-        return;
+    try {
+        const bookById = await getBook(id) as Book;
+    
+        if (!bookById) {
+            res.statusCode = EStatusCodes.NotFound;
+            res.json(NOT_FOUND_MESSAGE);
+            return;
+        }
+    
+        const templatePath = path.join(__dirname, './template/index.ejs');
+        const templateData = {
+            book: bookById,
+            title: 'Редактировать книгу',
+        };
+    
+        res.renderPage(templatePath, templateData)
+            .catch(error => {
+                res.statusCode = EStatusCodes.InternalError;
+                res.json(error);
+            });
+
+    } catch (error) {
+        res.status(EStatusCodes.InternalError);
+        res.json(error);
     }
-
-    const templatePath = path.join(__dirname, './template/index.ejs');
-    const templateData = {
-        book: bookById,
-        title: 'Редактировать книгу',
-    };
-
-    res.renderPage(templatePath, templateData)
-        .catch(error => {
-            res.statusCode = EStatusCodes.InternalError;
-            res.json(error);
-        });
 });
 
-editBookPageRoute.post(`${ROUTES_BASE}:id`, downloadBooksMiddleware, (req, res) => {
-    editBook(req)
-        .then(() => res.redirect(ROUTES_BASE))
-        .catch(errors => {
-            res.statusCode = EStatusCodes.BadRequest;
-            res.json(errors);
-        });
+editBookPageRoute.post(`${ROUTES_BASE}:id`, downloadBooksMiddleware, async (req, res) => {
+    try {
+        await editBook(req);
+        res.redirect(ROUTES_BASE);
+
+    } catch (error) {
+        res.status(EStatusCodes.InternalError);
+        res.json(error);
+    }
 });
