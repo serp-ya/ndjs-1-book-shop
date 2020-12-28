@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import path from 'path';
-import { getBook } from '@/database/book';
+import { getBook } from '@/database/books-database/models/book';
 import { ROUTES_BASE } from '../../../routes-constants';
 import { EStatusCodes } from '../../../routes-enums';
 

@@ -1,8 +1,14 @@
 import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
+import { booksDBConnection } from '../../books-database';
 import { BOOKS_COLLECTION_NAME } from './book-constants';
 import { EBookFields } from './book-enum';
 
-@modelOptions({ schemaOptions: { collection: BOOKS_COLLECTION_NAME } })
+const bookModelOptions = {
+    existingConnection: booksDBConnection,
+    schemaOptions: { collection: BOOKS_COLLECTION_NAME },
+};
+
+@modelOptions(bookModelOptions)
 export class Book {
     @prop({ required: true })
     public [EBookFields.Authors]!: string;

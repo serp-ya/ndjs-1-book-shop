@@ -1,11 +1,11 @@
 import { server } from './server';
 import { APP_DEFAULT_PORT } from './constants';
-import { dbConnect } from './database';
+import { booksDBConnection, usersDBConnection } from './database';
 import { PORT } from './env';
 
 const appPort = PORT || APP_DEFAULT_PORT;
 
-dbConnect
+Promise.all([booksDBConnection, usersDBConnection])
     .then(() => {
         server.listen(appPort, () => {
             process.stdout.write(`Server started on ${appPort} port!\n`);

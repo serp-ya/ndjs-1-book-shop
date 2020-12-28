@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Book, getBook } from '@/database/book';
-import { getBookFileName } from '@/database/book-file';
+import { Book, getBook } from '@/database/books-database/models/book';
+import { getBookFileName } from '@/database/books-database/models/book-file';
 import { downloadBooksMiddleware, getPathForBookFile } from '@/middlewares/download-book';
 import { NOT_FOUND_MESSAGE, ROUTES_BASE } from '../../routes-constants';
 import { EStatusCodes } from '../../routes-enums';
