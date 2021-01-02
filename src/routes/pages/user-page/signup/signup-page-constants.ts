@@ -1,0 +1,1 @@
+export const SIGN_UP_PAGE_ROUTE_NAME = 'signup';

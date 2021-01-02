@@ -1,6 +1,6 @@
 export enum EUserFields {
-    Email = 'email',
     FirstName = 'firstName',
+    Login = 'login',
     Password = 'password',
     SecondNameName = 'secondName',
     UserGroupCode = 'userGroupCode',

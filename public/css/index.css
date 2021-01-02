@@ -60,3 +60,15 @@
 .logo__link:hover {
     color: black;
 }
+
+.login__anchor {
+    color: black;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.send-form-btn {
+    margin-bottom: 10px;
+    margin-top: 15px;
+}

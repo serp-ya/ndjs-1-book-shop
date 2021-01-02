@@ -1,0 +1,19 @@
+<%
+    const {
+        error,
+    } = locals;
+%>
+
+<%-
+include(
+    '../../../components/main-template/index',
+    {
+        content: include(
+            './login-page',
+        ),
+        error,
+        title,
+        user,
+    }
+)
+-%>

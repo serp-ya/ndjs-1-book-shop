@@ -1,0 +1,12 @@
+<%-
+include(
+    '../../components/main-template/index',
+    {
+        content: include(
+            './main-page',
+            { books, isAdmin }),
+        title,
+        user,
+    }
+)
+-%>

@@ -1,0 +1,35 @@
+<%- include('../head/index', { title }); -%>
+
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="col logo">
+            <a class="logo__link" href="/">
+                Books shop
+            </a>
+        </div>
+
+        <div class="col login">
+            <% if (!user) { %>
+                <div class="d-flex login__anchors justify-content-end">
+                    <a class="login__anchor" href="/user/login">Sign in</a>
+                    <a class="login__anchor" href="/user/signup">Sign up</a>
+                </div>
+            <% } else { %>
+                <div class="d-flex login__username justify-content-end">
+                    <a class="login__anchor" href="/user/me">
+                        <%= user.secondName %> <%= user.firstName %>
+                    </a>
+                    <a class="login__anchor" href="/user/signout">
+                        Sign out
+                    </a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <%- content -%>
+</div>
+
+<%- include('../foot/index'); -%>

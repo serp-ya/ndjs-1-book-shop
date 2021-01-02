@@ -1,0 +1,40 @@
+<%
+    const { error } = locals;
+%>
+
+<div class="row">
+    <h3>Sign in</h3>
+    <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+    <form
+        enctype="multipart/form-data"
+        method="POST"
+    >
+        <div class="col-6">
+            <label class="form-label" for="login">Login</label>
+            <input
+                class="form-control"
+                id="login"
+                name="login"
+                required
+            />
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="password">Password</label>
+            <input
+                class="form-control"
+                id="password"
+                minlength="3"
+                name="password"
+                required
+                type="password"
+            />
+        </div>
+        <button class="btn btn-primary send-form-btn" type="submit" >
+            Login
+        </button>
+    </form>
+</div>

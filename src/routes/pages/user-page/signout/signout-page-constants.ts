@@ -1,0 +1,1 @@
+export const SIGN_OUT_PAGE_ROUTE_NAME = 'signout';

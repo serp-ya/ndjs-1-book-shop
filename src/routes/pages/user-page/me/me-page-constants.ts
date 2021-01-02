@@ -1,0 +1,1 @@
+export const ME_PAGE_ROUTE_NAME = 'me';
