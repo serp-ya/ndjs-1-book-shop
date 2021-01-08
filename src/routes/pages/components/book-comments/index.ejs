@@ -1,0 +1,29 @@
+<%
+  const { isAdmin = false, user } = locals;
+  const { _id: userId = '' } = user || {};
+%>
+
+<div class="comments">
+    <h3>Comments</h3>
+
+    <% if (user) { %>
+        <div class="mb-3">
+            <label class="form-label" for="input_comment">Input your comment</label>
+            <textarea class="form-control" id="input_comment" rows="3"></textarea>
+        </div>
+
+        <div class="alert alert-danger" id="comment_error" role="alert" style="display: none;">
+        </div>
+
+        <button class="btn btn-primary" id="send_comment" type="button">Send new comment</button>
+    <% } else { %>
+        <div>To write comments please <a href="/user/login">Sign in</a>!</div>
+    <% } %>
+
+    <div class="comments__container" id="comments_container"></div>
+</div>
+
+<%- include('./book-comments-scripts', {
+    isAdmin,
+    userId,
+}); -%>

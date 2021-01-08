@@ -1,0 +1,1 @@
+export const BOOK_COMMENTS_NAMESPACE = 'book-comments';

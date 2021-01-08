@@ -1,5 +1,4 @@
 import express from 'express';
-import expressSession from 'express-session';
 import cors from 'cors';
 import { BOOKS_ROUTE_NAME, booksRoute } from './routes/api/books';
 import { LOGIN_ROUTE_NAME, loginRoute } from './routes/api/login';
@@ -9,18 +8,15 @@ import { mainPageRoute } from './routes/pages/main-page';
 import { USER_PAGE_ROUTE_NAME, userPageRoute } from './routes/pages/user-page';
 import { auth } from './middlewares/auth';
 import { renderPage } from './middlewares/render-page';
-import {
-    PUBLIC_FOLDER_NAME,
-    PUBLIC_FOLDER_PATH,
-    SESSION_CONFIG,
-} from './constants';
+import { sessionMiddleware } from './middlewares/session';
+import { PUBLIC_FOLDER_NAME, PUBLIC_FOLDER_PATH } from './constants';
 
 export const server = express();
 
 server.set('view engine', 'ejs');
 
 server.use(cors());
-server.use(expressSession(SESSION_CONFIG));
+server.use(sessionMiddleware);
 server.use(auth.initialize());
 server.use(auth.session());
 server.use(renderPage());
