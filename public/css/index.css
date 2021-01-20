@@ -72,3 +72,14 @@
     margin-bottom: 10px;
     margin-top: 15px;
 }
+
+.comments {
+    padding-bottom: 40px;
+    padding-top: 25px;
+}
+
+.comment__body {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 350px;
+}

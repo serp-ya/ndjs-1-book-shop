@@ -1,0 +1,152 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const bookId = window.location.pathname.split('/').pop();
+    const currentUserId = '<%= userId %>';
+    const isUserAdmin = <%= isAdmin %>;
+    const socket = io.connect('/book-comments', { query: `bookId=${bookId}`, });
+
+    const commentsContainer = document.getElementById('comments_container');
+
+    const COMMENT_MIN_LENGTH = 5;
+
+    const removeAllChildNodes = (node) => {
+        while (node.firstChild) {
+            node.removeChild(node.firstChild);
+        }
+    };
+
+    const createDomNode = (tagName, classNames, childrens) => {
+        const node = document.createElement(tagName);
+        node.classList.add(...classNames);
+
+        if (Array.isArray(childrens)) {
+            node.append(...childrens);
+
+        } else {
+            node.append(childrens);
+        }
+        
+        return node;
+    };
+
+    const formatTimestamp = (timestamp) => (
+        new Date(timestamp).toLocaleString('en-US', { hour12: false })
+    );
+
+    const createComment = ({ _id: commentId, author, text, timestamp }, currentUserId) => {
+        const { _id: authorId, firstName, login, secondName } = author || {};
+        const isCurrentUserComment = currentUserId === authorId;
+        const commentDeleteBtn = createDomNode(
+            'div',
+            ['btn', 'btn-danger'],
+            'delete'
+        );
+
+        if (isUserAdmin) {
+            commentDeleteBtn.addEventListener('click', () => {
+                socket.emit('delete comment', { commentId });
+            });
+        }
+
+        const commentAuthorName = createDomNode(
+            'h5',
+            ['card-title'],
+            `${firstName} ${secondName} ${isCurrentUserComment ? '[is your comment]' : ''}`,
+        );
+        const commentTopLine = createDomNode(
+            'div',
+            ['d-flex', 'justify-content-between'],
+            [commentAuthorName, isUserAdmin ? commentDeleteBtn : '',]
+        );
+        const commentAuthorLogin = createDomNode(
+            'h6',
+            ['card-subtitle', 'mb-2', isCurrentUserComment ? 'text-white' : 'text-muted'],
+            `@${login} at ${formatTimestamp(timestamp)}`,
+        );
+        const commentHeader = createDomNode(
+            'div',
+            ['card-header', 'comment__header'],
+            [commentTopLine, commentAuthorLogin],
+        );
+
+        const commentText = createDomNode(
+            'div',
+            ['card-text'],
+            text,
+        );
+        const commentBody = createDomNode(
+            'div',
+            ['card-body'],
+            [commentText],
+        );
+
+        const commentNode = createDomNode(
+            'div',
+            ['card', 'comment', 'comment__body', ...(isCurrentUserComment ? ['text-white', 'bg-primary'] : [])],
+            [commentHeader, commentBody]
+        );
+
+        commentNode.id = commentId;
+
+        return commentNode;
+    };
+
+    const prepareComment = (text) => text ? text.trim() : '';
+
+    const validateComment = (text) => {
+        if (!text) {
+            return 'Please, input your comment!';
+        }
+        if (text && text.length < COMMENT_MIN_LENGTH) {
+            return `Comment must be ${COMMENT_MIN_LENGTH} chars minimum`;
+        }
+    };
+
+    if (currentUserId) {
+        const inputComment = document.getElementById('input_comment');
+        const sendComment = document.getElementById('send_comment');
+        const commentError = document.getElementById('comment_error');
+
+        const setError = (errorText) => {
+            commentError.textContent = errorText;
+            commentError.style.display = 'block';
+        };
+
+        const hideError = () => {
+            commentError.textContent = '';
+            commentError.style.display = 'none';
+        }
+
+        // Event handlers
+        inputComment.addEventListener('input', hideError);
+
+        sendComment.addEventListener('click', () => {
+            const commentText = prepareComment(inputComment.value);
+            const commentError = validateComment(commentText);
+
+            if (commentError) {
+                return setError(commentError);
+            }
+
+            socket.emit('add comment', { text: commentText });
+            inputComment.value = '';
+        });
+    }
+
+    // Socket.io listeners
+    socket.on('connect', () => {
+        removeAllChildNodes(commentsContainer);
+        socket.emit('load all comments');
+    });
+
+    socket.on('recive comment', (commentData) => {
+        const comment = createComment(commentData, currentUserId);
+
+        commentsContainer.append(comment);
+    });
+
+    socket.on('delete comment', (commentId) => {
+        const commentNode = document.getElementById(commentId);
+        commentNode.parentNode.removeChild(commentNode);
+    });
+</script>

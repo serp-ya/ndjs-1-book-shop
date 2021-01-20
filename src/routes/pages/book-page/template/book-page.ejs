@@ -1,12 +1,17 @@
 <%
-  const { isAdmin, viewsCounter } = locals;
+  const { isAdmin, viewsCounter, user } = locals;
 %>
 
-<div class="main-page">
+<div class="book-page">
     <%- include('../../components/book-card/index', {
         book,
         isAdmin,
         isSingle: true,
         viewsCounter,
+    }); -%>
+    
+    <%- include('../../components/book-comments/index', {
+        isAdmin,
+        user,
     }); -%>
 </div>
