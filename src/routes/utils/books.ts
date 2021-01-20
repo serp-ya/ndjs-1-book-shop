@@ -2,8 +2,8 @@ import {
     createBook as createBookMongo,
     deleteBook as deleteBookMongo,
     updateBook,
-} from '@/database/book';
-import { setBookFileName } from '@/database/book-file';
+} from '@/database/books-database/models/book';
+import { setBookFileName } from '@/database/books-database/models/book-file';
 
 export const createBook = async (req) => {
     const newBook = await createBookMongo(req);

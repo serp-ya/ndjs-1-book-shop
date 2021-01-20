@@ -18,5 +18,4 @@ services:
       PORT: 5000
       VIEW_COUNTER_URL: http://book-shop-views-counter:5500
     volumes:
-      - .\src:/app/src
-      - .\public:/app/public
+      - .\:/app/

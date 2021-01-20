@@ -1,0 +1,18 @@
+<%
+  const { isAdmin, viewsCounter } = locals;
+%>
+
+<%-
+include(
+    '../../components/main-template/index',
+    {
+        content: include(
+            './book-page',
+            { book, isAdmin, user },
+        ),
+        title,
+        viewsCounter,
+        user,
+    }
+)
+-%>

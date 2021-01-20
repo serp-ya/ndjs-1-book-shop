@@ -1,0 +1,16 @@
+<div class="row">
+    <% if(!books || books.length === 0) { %>
+        <h2>Список книг пуст</h2>
+    <% } else {
+        books.forEach(book => {
+    %>
+        <%- include('../book-card/index', {
+            book,
+            descriptionLengthLimit: 250,
+            isAdmin,
+            isSingle: false,
+        }) -%>
+    <%
+        });
+    } %>
+</div>

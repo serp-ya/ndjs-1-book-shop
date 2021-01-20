@@ -60,3 +60,26 @@
 .logo__link:hover {
     color: black;
 }
+
+.login__anchor {
+    color: black;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.send-form-btn {
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.comments {
+    padding-bottom: 40px;
+    padding-top: 25px;
+}
+
+.comment__body {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width: 350px;
+}

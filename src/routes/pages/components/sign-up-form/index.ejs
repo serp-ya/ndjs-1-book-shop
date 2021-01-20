@@ -1,0 +1,81 @@
+<div class="row">
+    <h3>Sign up</h3>
+    <div class="alert alert-danger error error_box" id="error_box" role="alert" style="display: none;">
+        <span id="error__message"></span>
+    </div>
+    <form
+        enctype="multipart/form-data"
+        id="sign-up-form"
+        method="POST"
+    >
+        <div class="col-6">
+            <label class="form-label" for="login">Login</label>
+            <input
+                class="form-control"
+                id="login"
+                name="login"
+                required
+            />
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="firstName">First name</label>
+            <input
+                class="form-control"
+                id="firstName"
+                minlength="3"
+                name="firstName"
+                required
+            />
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="secondName">Second name</label>
+            <input
+                class="form-control"
+                id="secondName"
+                minlength="3"
+                name="secondName"
+                required
+            />
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="password">Password</label>
+            <input
+                class="form-control"
+                id="password"
+                minlength="3"
+                name="password"
+                required
+                type="password"
+            />
+        </div>
+        <div class="col-6">
+            <label class="form-label" for="repeat-the-password">Repeat the password</label>
+            <input
+                class="form-control"
+                id="repeat-the-password"
+                minlength="3"
+                name="repeat-the-password"
+                required
+                type="password"
+            />
+        </div>
+        <button class="btn btn-primary " type="submit">
+            Sign up
+        </button>
+    </form>
+</div>
+<script>
+    const form = document.getElementById('sign-up-form');
+    const pswd = document.getElementById('password');
+    const pswdRepeat = document.getElementById('repeat-the-password');
+    const errorBox = document.getElementById('error_box');
+    const errorMessage = document.getElementById('error__message');
+
+    form.addEventListener('submit', event => {
+        if (pswd.value !== pswdRepeat.value) {
+            event.preventDefault();
+            errorBox.style.display = 'flex';
+            errorMessage.textContent = 'Password field not equal repeat password field';
+        }
+    })
+</script>
