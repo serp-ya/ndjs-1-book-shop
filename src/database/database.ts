@@ -5,7 +5,7 @@ import { DBError } from './database-error';
 
 const booksInitialData = require('./data') as TBookParams[];
 
-class DB {
+export class DB {
     private storage: TDBStorage;
 
     constructor() {

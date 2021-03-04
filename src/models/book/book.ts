@@ -2,7 +2,17 @@ import { v4 as uuid } from 'uuid';
 import type { TBookParams } from './book-types';
 import { bookParamsSchema } from './book-schema';
 
-export class Book {
+interface IBook {
+    readonly id: string;
+    readonly title: string;
+    readonly description: string;
+    readonly authors: string;
+    readonly favorite: boolean;
+    readonly fileCover: string;
+    readonly fileName: string;
+}
+
+export class Book implements IBook{
     public readonly id: string;
     public readonly title: string;
     public readonly description: string;
